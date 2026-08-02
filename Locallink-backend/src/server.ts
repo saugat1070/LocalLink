@@ -1,7 +1,10 @@
 import { app } from "./main.js";
 import { Env } from "./config/env.config.js";
 import { logger } from "./config/logger.config.js";
-const loadRequiredModules = async ()=>{}
+import { connectDB } from "./config/db.config.js";
+const loadRequiredModules = async ()=>{
+    await connectDB();
+}
 const startServer = async ()=>{
     const PORT = Env.PORT;
     app.listen(PORT,()=>{

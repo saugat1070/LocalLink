@@ -7,7 +7,7 @@ export const connectDB = async () => {
         await mongoose.connect(Env.DB_URL, {
             connectTimeoutMS: 10000,
         });
-
+        logger.info("Database connected");
         mongoose.connection.on("connected", () => {
             logger.info("Database connected successfully");
         });
