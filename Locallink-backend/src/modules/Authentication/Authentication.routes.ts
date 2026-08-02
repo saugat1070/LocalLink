@@ -9,13 +9,10 @@ authenticationRouter.route("/google").get(passport.authenticate("google", { scop
 
 // callback route for google callback
 authenticationRouter.route("/google/callback").get(
-    passport.authenticate(
-        "google",
-        {
-            session: false,
-            failureRedirect: "/ping", // replace with client failure page
-        },
-        authenticationController.googleCallback.bind(authenticationController),
-    ),
+    passport.authenticate("google", {
+        session: false,
+        failureRedirect: "/ping", // replace with client failure page
+    }),
+    authenticationController.googleCallback.bind(authenticationController),
 );
 export default authenticationRouter;

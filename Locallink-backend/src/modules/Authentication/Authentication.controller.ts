@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { ForbiddenError, NotFoundError } from "../../utils/errors/app.error.js";
-import { IAuthenticationService } from "./Authentication.service.js";
+import { AuthenticatedUser, IAuthenticationService } from "./Authentication.service.js";
 import { Profile } from "passport-google-oauth20";
 import { Env } from "../../config/env.config.js";
 import { jwtToken } from "../../utils/helper/jwt.token.js";
@@ -19,16 +19,11 @@ class AuthenticationController implements IAuthenticationController {
 
     async googleCallback(req: Request, res: Response): Promise<void> {
         // generate accesstoken and save in cookie
-        if (!req.userId || !req.user) throw new NotFoundError("you are not authenticate yet, please login first");
-
-        const user = await this.authenticationService.findOrCreateGoogleAccount(req.user as Profile);
-        if (!user) {
-            throw new ForbiddenError("sorry to login with google, please try again.");
-        }
-
+        if (!req.user) throw new NotFoundError("you are not authenticate yet, please login first");
+        console.log("Request user:",req.user)
         // generate accesstoken and refreshtoken
-        const refreshToken = await jwtToken.refreshToken({ id: user._id, type: "refresh" });
-        const accessToken = jwtToken.accessToken({ id: user._id, refreshId: refreshToken?.refreshTokenId, type: "access" });
+        const refreshToken = await jwtToken.refreshToken({ id: (req.user as AuthenticatedUser)._id, type: "refresh" });
+        const accessToken = jwtToken.accessToken({ id: (req.user as AuthenticatedUser)._id, refreshId: refreshToken?.refreshTokenId, type: "access" });
 
         // redirect to auth success page
         res.redirect(`${Env.NODE_CLIENT_URL}/auth/?token=${accessToken}&createdAt=${Date.now()}/success`);

@@ -12,9 +12,9 @@ passport.use(
             callbackURL: OAuthEnv.GOOGLE_CALLBACK,
             scope: ["email", "profile"]
         },
-        function (accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback) {
+        async function (accessToken: string, refreshToken: string, profile: Profile, done: VerifyCallback) {
             try {
-                const user = authenticationService.findOrCreateGoogleAccount(profile);
+                const user = await authenticationService.findOrCreateGoogleAccount(profile);
                 done(null, user);
             } catch (error: Error | any) {
                 logger.error("Error in google strategy", {error: error.message});

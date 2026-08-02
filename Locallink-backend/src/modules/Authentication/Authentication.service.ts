@@ -4,7 +4,7 @@ import { Env } from "../../config/env.config.js";
 import { Profile } from "passport-google-oauth20";
 import { RefreshModel } from "../../models/refresh.model.js";
 
-type AuthenticatedUser = HydratedDocument<IAuthenticationModel>;
+export type AuthenticatedUser = HydratedDocument<IAuthenticationModel>;
 
 
 
@@ -19,6 +19,7 @@ export default class AuthenticationService implements IAuthenticationService{
 
     // find or create google account - for social login
     async findOrCreateGoogleAccount(profile: Profile): Promise<AuthenticatedUser> {
+        
         const user = await AuthenticationModel.findOne({providerId: profile?.id, provider: "google"});
         if(!user){
             return await AuthenticationModel.create({
