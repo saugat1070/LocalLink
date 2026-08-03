@@ -10,14 +10,19 @@ const $axios = axios.create({
 });
 
 //  flag to avoid multiple refresh calls
+type QueuedRequest = {
+  resolve: (token: string) => void;
+  reject: (error: Error) => void;
+};
+
 let isRefreshing = false;
-let failedQueue: any[] = [];
+let failedQueue: QueuedRequest[] = [];
 
 // process queued requests
-const processQueue = (error: any, token: string | null = null) => {
+const processQueue = (error: Error | null, token?: string) => {
   failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
+    if (error || !token) {
+      prom.reject(error ?? new Error("Token refresh returned no token"));
     } else {
       prom.resolve(token);
     }
@@ -55,7 +60,7 @@ $axios.interceptors.response.use(
               originalRequest.headers.Authorization = `Bearer ${token}`;
               resolve($axios(originalRequest));
             },
-            reject: (err: any) => reject(err),
+            reject: (err: Error) => reject(err),
           });
         });
       }
@@ -77,15 +82,15 @@ $axios.interceptors.response.use(
         localStorage.setItem("accessToken", newAccessToken);
 
         // update default header
-        axiosApi.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
+        $axios.defaults.headers.Authorization = `Bearer ${newAccessToken}`;
 
         processQueue(null, newAccessToken);
 
         // retry original request
         originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
-        return axiosApi(originalRequest);
+        return $axios(originalRequest);
       } catch (err) {
-        processQueue(err, null);
+        processQueue(err as Error);
 
         // logout if refresh fails
         localStorage.removeItem("accessToken");
@@ -105,4 +110,4 @@ $axios.interceptors.response.use(
   }
 );
 
-export default axiosApi;
+export default $axios;
