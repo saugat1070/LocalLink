@@ -15,4 +15,7 @@ authenticationRouter.route("/google/callback").get(
     }),
     authenticationController.googleCallback.bind(authenticationController),
 );
+
+// logout route
+authenticationRouter.route("/logout").get(authenticationController.logout.bind(authenticationController));
 export default authenticationRouter;
