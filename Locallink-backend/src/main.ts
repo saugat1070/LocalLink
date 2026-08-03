@@ -5,11 +5,13 @@ import { attachCorrelationId } from "./middleware/correlation.middleware.js";
 import "./utils/oauthStrategy/index.js";
 import { appErrorHandler, genericErrorHandler } from "./middleware/error.middleware.js";
 import passport from "passport";
+import { corsMiddleware } from "./config/cors.config.js";
 // instance of express application
 export const app: express.Application = express();
 
 // Middleware to parse JSON requests
 app.use(express.json());
+app.use(corsMiddleware);
 
 // passport initialization
 app.use(passport.initialize());
