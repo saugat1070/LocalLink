@@ -1,7 +1,10 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { authStorage } from "@/lib/auth.storage";
+import { authenticateService } from "@/services/authenticate.service";
+import { AuthRoute } from "@/enums/auth.enum";
+import { useRouter } from "next/navigation";
 
 export type AuthStatus = "loading" | "authenticated" | "unauthenticated";
 
@@ -10,6 +13,8 @@ export type AuthStatus = "loading" | "authenticated" | "unauthenticated";
 const subscribe = () => () => {};
 
 export function useAuthenticate() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
   // `undefined` during SSR and hydration, `string | null` once on the client.
   const token = useSyncExternalStore(
     subscribe,
@@ -24,5 +29,17 @@ export function useAuthenticate() {
         ? "authenticated"
         : "unauthenticated";
 
-  return { token, status };
+  const logout = async () => {
+        setLoading(true);
+        try {
+            await authenticateService.logout();
+            router.push(AuthRoute.HOME);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+  return { token, status, logout, loading };
 }
