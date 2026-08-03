@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AuthRoute } from "@/enums/auth.enum";
-import { useAuthenticate } from "@/hooks/useAuthenticate";
+import { useAuthenticate } from "@/hooks/Authentication/useAuthenticate";
 
 export default function AuthGuard({
   children,

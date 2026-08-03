@@ -14,7 +14,7 @@ export function useAuthenticate() {
   const token = useSyncExternalStore(
     subscribe,
     () => authStorage.getAccessToken(),
-    () => undefined
+    () => undefined,
   );
 
   const status: AuthStatus =

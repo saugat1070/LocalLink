@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import OAuthSuccessHandler, { Pending } from "@/components/OAuthSuccessHandler";
+import OAuthSuccessHandler, { Pending } from "@/components/Authentication/OAuthSuccessHandler";
 
 export default function OAuthSuccessPage() {
   // useSearchParams client-side renders everything up to the nearest Suspense

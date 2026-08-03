@@ -26,3 +26,15 @@ export const OAuthParam = {
   CREATED_AT: "createdAt",
   ERROR: "error",
 } as const;
+
+// NAVIGATION LINKS
+export const NavLink = {
+  HOME : {
+    href: "/",
+    label: "Home",
+  },
+  LOGIN: {
+    href: "/login",
+    label: "Sign in",
+  },
+} as const;
