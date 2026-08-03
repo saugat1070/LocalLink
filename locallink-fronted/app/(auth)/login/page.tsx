@@ -1,5 +1,5 @@
 // import type { Metadata } from "next";
-import GoogleSignInButton from "@/components/GoogleSignInButton";
+import GoogleSignInButton from "@/components/Authentication/GoogleSignInButton";
 
 // export const metadata: Metadata = {
 //   title: "Sign in · LocalLink",
