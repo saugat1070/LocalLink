@@ -7,6 +7,7 @@ export interface IUserController {
 export class UserController implements IUserController {
     private userService: IUserService
     constructor(private user_service: IUserService){
-        this.userService = user_service
+        this.userService = user_service;
     }
+    
 }
