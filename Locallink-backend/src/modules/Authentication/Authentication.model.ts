@@ -10,8 +10,6 @@ export interface IAuthenticationModel {
     providerId?: string;
     avatarUrl?: string;
     password?: string;
-    socketId?: string;
-    roomId?: string;
 }
 
 const authenticationSchema = new mongoose.Schema<IAuthenticationModel>({
@@ -65,13 +63,7 @@ const authenticationSchema = new mongoose.Schema<IAuthenticationModel>({
         required: function (this){
             return this.provider === "local";
         }
-    },
-    socketId: {
-        type: String,
-    },
-    roomId: {
-        type: String,
-    },
+    }
 },{
     toObject: { virtuals: true },
     toJSON: { virtuals: true }
