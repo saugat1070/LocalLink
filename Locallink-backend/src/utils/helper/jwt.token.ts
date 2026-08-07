@@ -25,7 +25,7 @@ export const jwtToken = {
         return jwt.sign(payload, Env.JWT_SECRET_ACCESS_TOKEN, { expiresIn: "10m" });
     },
 
-    async decodeToken(token: string, type: "access" | "refresh"): Promise<TokenPayload> {
-        return jwt.verify(token, type === "access" ? Env.JWT_SECRET_ACCESS_TOKEN : Env.JWT_SECRET_REFRESH_TOKEN) as TokenPayload;
+    async decodeToken(token: string, type: "access" | "refresh", ignoreExpired = false): Promise<TokenPayload> {
+        return jwt.verify(token, type === "access" ? Env.JWT_SECRET_ACCESS_TOKEN : Env.JWT_SECRET_REFRESH_TOKEN, { ignoreExpiration: ignoreExpired }) as TokenPayload;
     }
 };

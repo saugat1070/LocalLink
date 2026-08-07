@@ -1,6 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import { authenticationController } from "./index.js";
+import AuthMiddleware from "../../middleware/auth.middleware.js";
 // declare authentication router
 const authenticationRouter: Router = Router();
 
@@ -16,6 +17,9 @@ authenticationRouter.route("/google/callback").get(
     authenticationController.googleCallback.bind(authenticationController),
 );
 
+// refresh token route
+authenticationRouter.route("/refresh").get(AuthMiddleware(),authenticationController.handleRefreshToken.bind(authenticationController));
+
 // logout route
-authenticationRouter.route("/logout").get(authenticationController.logout.bind(authenticationController));
+authenticationRouter.route("/logout").get(AuthMiddleware(),authenticationController.logout.bind(authenticationController));
 export default authenticationRouter;

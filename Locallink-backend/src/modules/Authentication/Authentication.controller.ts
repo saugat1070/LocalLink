@@ -5,10 +5,12 @@ import { Profile } from "passport-google-oauth20";
 import { Env } from "../../config/env.config.js";
 import { jwtToken } from "../../utils/helper/jwt.token.js";
 import { JsonResponse } from "../../utils/helper/response.helper.js";
+import { access } from "node:fs";
 // abstract class for authentication controller
 interface IAuthenticationController {
     googleCallback(req: Request, res: Response): Promise<void>;
     logout(req: Request, res: Response): Promise<void>;
+    handleRefreshToken(req: Request, res: Response): Promise<void>;
 }
 
 class AuthenticationController implements IAuthenticationController {
@@ -27,6 +29,12 @@ class AuthenticationController implements IAuthenticationController {
 
         // redirect to auth success page
         res.redirect(`${Env.NODE_CLIENT_URL}/auth/?token=${accessToken}&createdAt=${Date.now()}/success`);
+    }
+
+    async handleRefreshToken(req: Request, res: Response): Promise<void> {
+        if(!req.refreshId) throw new NotFoundError("refresh token not found");
+        const result = await this.authenticationService.handleRefreshToken(req.refreshId, req.userId);
+        JsonResponse(res, 200, true, "refresh token successful", {accessToken: result.token});
     }
     async logout(req: Request, res: Response): Promise<void> {
         const refreshToken = await this.authenticationService.findAndDeleteRefreshToken(req.userId);
