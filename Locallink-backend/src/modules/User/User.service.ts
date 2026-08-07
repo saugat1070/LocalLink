@@ -11,7 +11,7 @@ export class UserService implements IUserService {
     constructor() {
     }
     // @usecase: add member to room chat
-    async addMemberToRoom(userId: string | mongoose.Types.ObjectId, roomId: string): Promise<IRoomSocketModel | null> {
+    async addMemberToRoom(userId: string | mongoose.Types.ObjectId, roomId: string ): Promise<IRoomSocketModel | null> {
         const joinRoom = await RoomSocketModel.findOneAndUpdate(
             {userId: userId},
             {
@@ -25,7 +25,7 @@ export class UserService implements IUserService {
         );
         return joinRoom;
     }
-
+    // @usecase: remove member from room
     async removeMemberFromRoom(userId: string | mongoose.Types.ObjectId, roomId: string): Promise<IRoomSocketModel | null> {
         const leaveRoom = await RoomSocketModel.findOneAndUpdate(
             {userId: userId},
